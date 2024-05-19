@@ -27,6 +27,4 @@ source $VENV_DIR/bin/activate
 echo "${BOLD}Installing python dependencies${NORMAL}"
 
 python3 -m pip install --upgrade pip
-python3 -m pip install ".[dev]"
-# pip install -r requirements.txt
-# mypy --install-types
+python3 -m pip install -e ".[dev]"

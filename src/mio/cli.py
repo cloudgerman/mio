@@ -1,21 +1,11 @@
-"""Console script for mio."""
-import mio
+import click
 
-import typer
-from rich.console import Console
-
-app = typer.Typer()
-console = Console()
+from .cli_imap import imap
 
 
-@app.command()
-def main():
-    """Console script for mio."""
-    console.print("Replace this message by putting your code into "
-               "mio.cli.main")
-    console.print("See Typer documentation at https://typer.tiangolo.com/")
-    
+@click.group()
+def main() -> None:
+    pass
 
 
-if __name__ == "__main__":
-    app()
+main.add_command(imap)

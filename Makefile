@@ -46,21 +46,23 @@ lint: lint/ruff ## check style
 test: ## run tests quickly with the default Python
 	pytest
 
-test-all: ## run tests on every Python version with tox
-	tox
-
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source mio -m pytest
 	coverage report -m --fail-under=89 > .coverage.txt
 	git diff .coverage.txt
 
-release: dist ## package and upload a release
-	twine upload dist/*
+typecheck: ## checks types with mypy
+	mypy
 
-dist: clean ## builds source and wheel package
-	python3 setup.py sdist
-	python3 setup.py bdist_wheel
-	ls -l dist
+test-all: lint typecheck test coverage ## lint, typecheck, test and coverage
 
-install: clean ## install the package to the active Python's site-packages
-	python3 setup.py install
+# release: dist ## package and upload a release
+#	twine upload dist/*
+
+# dist: clean ## builds source and wheel package
+#	python3 setup.py sdist
+#	python3 setup.py bdist_wheel
+#	ls -l dist
+
+# install: clean ## install the package to the active Python's site-packages
+#	python3 setup.py install
