@@ -3,13 +3,13 @@ import re
 import subprocess
 from typing import Generator
 
-from mio import ext
+from mio import _ext
 from mio.imap import _imap
 
 
 def test_imap_command() -> None:
 
-    class TestRclone(ext.Rclone):
+    class TestRclone(_ext.Rclone):
         commands: list[str] = [
             "/usr/bin/rclone lsd 'remote:'",
             "/usr/bin/rclone mkdir 'remote:backups'",
@@ -39,7 +39,7 @@ def test_imap_command() -> None:
         ) -> Generator[str, None, None]:
             assert False
 
-    class TestOfflineIMAP(ext.OfflineIMAP):
+    class TestOfflineIMAP(_ext.OfflineIMAP):
         commands: list[str] = []
 
         def _create_rc(

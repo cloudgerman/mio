@@ -3,7 +3,7 @@ import tempfile
 from datetime import datetime
 from typing import Type
 
-from . import ext, tgz
+from . import _ext, _tgz
 
 
 def imap(
@@ -21,8 +21,8 @@ def _imap(
     imap_host: str,
     debug: bool,
     # these are to easily test it
-    Rclone: Type[ext.Rclone] = ext.Rclone,
-    OfflineIMAP: Type[ext.OfflineIMAP] = ext.OfflineIMAP,
+    Rclone: Type[_ext.Rclone] = _ext.Rclone,
+    OfflineIMAP: Type[_ext.OfflineIMAP] = _ext.OfflineIMAP,
 ) -> None:
     """Backup an imap account"""
     if not imap_host:
@@ -42,6 +42,6 @@ def _imap(
         paths = oimap.download(imap_host, email)
 
         timestamp = datetime.now().strftime("%Y-%m-%d.%H-%M-%S")
-        zipped = tgz.pkg(tmpdir, f"{email}-{timestamp}", paths)
+        zipped = _tgz.pkg(tmpdir, f"{email}-{timestamp}", paths)
 
         rclone.upload(zipped, remote, rpath)

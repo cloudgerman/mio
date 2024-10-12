@@ -26,6 +26,7 @@ license = { file = "LICENSE" }
 dependencies = [
   "requests>=2.31",
   "defusedxml>=0.7",
+  "cloudflare>=3.1",
 ]
 
 [project.optional-dependencies]

@@ -3,14 +3,14 @@ import shutil
 import subprocess
 from typing import Generator
 
-from . import error
+from . import _error
 
 
 class Command(object):
     def __init__(self, exe: str) -> None:
         fullpath = shutil.which(exe)
         if not fullpath:
-            raise error.CommandNotFoundError(f"'{exe}' could not be found in the path")
+            raise _error.CommandNotFoundError(f"'{exe}' could not be found in the path")
         self.exe = pathlib.Path(fullpath)
 
     def _run(
@@ -43,7 +43,7 @@ class Command(object):
                     yield line
             p.wait()
             if p.returncode:
-                raise error.CommandError(f"'{cmd}' failed with error: {p.returncode}")
+                raise _error.CommandError(f"'{cmd}' failed with error: {p.returncode}")
 
 
 class Rclone(Command):
@@ -53,7 +53,7 @@ class Rclone(Command):
     def parse_dst(self, dst: str) -> tuple[str, pathlib.Path]:
         sep = ":"
         if sep not in dst:
-            raise error.ArgParsingError(
+            raise _error.ArgParsingError(
                 f"'{dst}' must conform to the pattern 'remote:path'"
             )
         remote, path = dst.split(sep, maxsplit=1)
@@ -66,18 +66,18 @@ class Rclone(Command):
         p = self._run(cmd)
         if p.returncode:
             print("ERROR")
-            raise error.GuardError(f"'{cmd}' failed with error: {p.stdout}")
+            raise _error.GuardError(f"'{cmd}' failed with error: {p.stdout}")
 
         print("OK")
 
     def mkdir(self, remote: str, path: pathlib.Path) -> None:
-        print("[rclone] creating path {remote}:{path!s}: ", end="")
+        print(f"[rclone] creating path {remote}:{path!s}: ", end="")
 
         cmd = f"{self.exe!s} mkdir '{remote}:{path!s}'"
         p = self._run(cmd)
         if p.returncode:
             print("ERROR")
-            raise error.CommandError(f"'{cmd}' failed with error: {p.stdout}")
+            raise _error.CommandError(f"'{cmd}' failed with error: {p.stdout}")
 
         print("OK")
 
@@ -88,7 +88,7 @@ class Rclone(Command):
         p = self._run(cmd)
         if p.returncode:
             print("ERROR")
-            raise error.CommandError(f"'{cmd}' failed with error: {p.stdout}")
+            raise _error.CommandError(f"'{cmd}' failed with error: {p.stdout}")
 
         print("OK")
 
