@@ -3,8 +3,6 @@ import shutil
 import subprocess
 from typing import Generator
 
-import click
-
 from . import error
 
 
@@ -62,37 +60,37 @@ class Rclone(Command):
         return (remote, pathlib.Path(path))
 
     def guard_configured(self, remote: str) -> None:
-        click.echo("[rclone] testing configuration: ", nl=False)
+        print("[rclone] testing configuration: ", end="")
 
         cmd = f"{self.exe!s} lsd '{remote}:'"
         p = self._run(cmd)
         if p.returncode:
-            click.echo("ERROR", nl=True)
+            print("ERROR")
             raise error.GuardError(f"'{cmd}' failed with error: {p.stdout}")
 
-        click.echo("OK", nl=True)
+        print("OK")
 
     def mkdir(self, remote: str, path: pathlib.Path) -> None:
-        click.echo("[rclone] creating path {remote}:{path!s}: ", nl=False)
+        print("[rclone] creating path {remote}:{path!s}: ", end="")
 
         cmd = f"{self.exe!s} mkdir '{remote}:{path!s}'"
         p = self._run(cmd)
         if p.returncode:
-            click.echo("ERROR", nl=True)
+            print("ERROR")
             raise error.CommandError(f"'{cmd}' failed with error: {p.stdout}")
 
-        click.echo("OK", nl=True)
+        print("OK")
 
     def upload(self, file: pathlib.Path, remote: str, path: pathlib.Path) -> None:
-        click.echo("[rclone] upload: ", nl=False)
+        print("[rclone] upload: ", end="")
 
         cmd = f"{self.exe!s} copy {file!s} {remote}:{path!s}"
         p = self._run(cmd)
         if p.returncode:
-            click.echo("ERROR", nl=True)
+            print("ERROR")
             raise error.CommandError(f"'{cmd}' failed with error: {p.stdout}")
 
-        click.echo("OK", nl=True)
+        print("OK")
 
 
 class OfflineIMAP(Command):
@@ -123,7 +121,7 @@ class OfflineIMAP(Command):
         return self._workdir / "download.log"
 
     def download(self, imap_host: str, email: str) -> list[pathlib.Path]:
-        click.echo("[offlineimap] starting download", nl=True)
+        print("[offlineimap] starting download")
 
         maildir = self._maildir()
         log = self._logfile()
@@ -134,10 +132,10 @@ class OfflineIMAP(Command):
         cmd = f"{self.exe!s} {debug} -c {rcpath!s} -a IMAP-Account"
         with open(log, "w") as flog:
             for line in self._runiter(cmd, env=self._envvars()):
-                click.echo(line, nl=False)
+                print(line, end="")
                 print(line, end="", file=flog)
 
-        click.echo("[offlineimap] download complete", nl=True)
+        print("[offlineimap] download complete")
         return [maildir, log]
 
     def _cfg(self, imap_host: str, email: str, maildir: pathlib.Path) -> str:

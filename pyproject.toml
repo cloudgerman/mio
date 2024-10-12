@@ -24,7 +24,8 @@ classifiers = [
 license = { file = "LICENSE" }
 
 dependencies = [
-  "click>=8.1"
+  "requests>=2.31",
+  "defusedxml>=0.7",
 ]
 
 [project.optional-dependencies]

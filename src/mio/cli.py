@@ -1,11 +1,25 @@
-import click
+import argparse
 
-from .cli_imap import imap
+from . import error
+from .imap import imap
 
 
-@click.group()
 def main() -> None:
-    pass
+    ap = argparse.ArgumentParser(
+        prog="mio",
+        description="my backups",
+    )
+    sp = ap.add_subparsers()
+    imap_sp = sp.add_parser("imap", help="imap backups")
+    imap_sp.add_argument("email")
+    imap_sp.add_argument("dst")
+    imap_sp.add_argument("--imap-host", default="")
+    imap_sp.add_argument("-d", "--debug", default=False)
 
+    ns = ap.parse_args()
 
-main.add_command(imap)
+    try:
+        imap(ns.email, ns.dst, imap_host=ns.imap_host, debug=ns.debug)
+    except error.MioError as e:
+        print(e)
+        exit(e.exit_code)

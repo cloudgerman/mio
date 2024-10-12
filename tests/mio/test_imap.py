@@ -4,7 +4,7 @@ import subprocess
 from typing import Generator
 
 from mio import ext
-from mio.cli_imap import _imap
+from mio.imap import _imap
 
 
 def test_imap_command() -> None:

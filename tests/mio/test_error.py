@@ -1,16 +1,8 @@
-from click import exceptions as clickex
-
 from mio import error
 
 
 def test_exceptions() -> None:
     error_codes: set[int] = set()
-
-    # click exceptions have exit_code as a class attribute
-    for name in dir(clickex):
-        attr = getattr(clickex, name)
-        if hasattr(attr, "exit_code"):
-            error_codes.add(attr.exit_code)
 
     for name in dir(error):
         attr = getattr(error, name)

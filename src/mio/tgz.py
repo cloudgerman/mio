@@ -1,16 +1,14 @@
-import pathlib
 import tarfile
+from pathlib import Path
 
-import click
 
-
-def pkg(workdir: pathlib.Path, stem: str, paths: list[pathlib.Path]) -> pathlib.Path:
-    click.echo("[tgz] packing files: ", nl=False)
+def pkg(workdir: Path, stem: str, paths: list[Path]) -> Path:
+    print("[tgz] packing files: ", end="")
 
     tgz = workdir / f"{stem}.tgz"
     with tarfile.open(tgz, "w:gz") as tar:
         for path in paths:
             tar.add(path, arcname=path.name)
 
-    click.echo("OK", nl=True)
+    print("OK")
     return tgz

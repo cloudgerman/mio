@@ -1,7 +1,4 @@
-import click
-
-
-class MioError(click.ClickException):
+class MioError(Exception):
     def __init__(self, exit_code: int, name: str, msg: str) -> None:
         self.exit_code = exit_code
         self.name = name
@@ -27,3 +24,8 @@ class CommandNotFoundError(MioError):
 class CommandError(MioError):
     def __init__(self, msg: str) -> None:
         super().__init__(exit_code=13, name="command:error", msg=msg)
+
+
+class IMAPSearchError(MioError):
+    def __init__(self, msg: str) -> None:
+        super().__init__(exit_code=14, name="imap:search", msg=msg)
